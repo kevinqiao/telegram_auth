@@ -30,6 +30,7 @@ app.post("/telegram-auth", (req, res) => {
     .sort()
     .map((key) => `${key}=${userData[key]}`)
     .join("\n");
+  console.log(dataCheckString);
 
   // 使用 Bot Token 生成哈希值的密钥
   const secretKey = crypto.createHash("sha256").update(TELEGRAM_BOT_TOKEN).digest();
