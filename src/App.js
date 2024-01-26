@@ -32,6 +32,7 @@ app.post("/telegram-auth", (req, res) => {
     .join("\n");
   console.log(dataCheckString);
   const lines = dataCheckString.split("\n");
+  console.log(lines);
   const keyValueRegex = /^[a-zA-Z_]+=[^\s]+$/; // 简单的正则表达式示例
 
   for (const line of lines) {
