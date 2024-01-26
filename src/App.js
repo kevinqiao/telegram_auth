@@ -31,6 +31,14 @@ app.post("/telegram-auth", (req, res) => {
     .map((key) => `${key}=${userData[key]}`)
     .join("\n");
   console.log(dataCheckString);
+  const lines = dataCheckString.split("\n");
+  const keyValueRegex = /^[a-zA-Z_]+=[^\s]+$/; // 简单的正则表达式示例
+
+  for (const line of lines) {
+    if (!keyValueRegex.test(line)) {
+      console.error(`格式错误的行: ${line}`);
+    }
+  }
 
   // 使用 Bot Token 生成哈希值的密钥
   const secretKey = crypto.createHash("sha256").update(TELEGRAM_BOT_TOKEN).digest();
