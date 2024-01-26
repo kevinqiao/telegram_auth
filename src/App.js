@@ -8,7 +8,9 @@ app.use(express.json()); // 解析 JSON 请求体
 const PORT = process.env.PORT || 3000;
 // 替换为您的 Telegram Bot Token
 const TELEGRAM_BOT_TOKEN = "6433300661:AAHiE1ga-G0dLW1SRQT4W_-DuKpV9iQ47Xo";
-
+app.get("/test", (req, res) => {
+  res.send("how are you");
+});
 app.post("/telegram-auth", (req, res) => {
   console.log("telegram-auth");
   const userData = req.body;
