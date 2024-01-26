@@ -36,7 +36,7 @@ app.post("/telegram-auth", (req, res) => {
 
   // 使用密钥生成哈希值
   const hash = crypto.createHmac("sha256", secretKey).update(dataCheckString).digest("hex");
-
+  console.log(userData.hash + ":" + hash);
   // 比较哈希值
   if (hash === userData.hash) {
     // 验证成功
