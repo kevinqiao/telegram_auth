@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 const TELEGRAM_BOT_TOKEN = "6433300661:AAHiE1ga-G0dLW1SRQT4W_-DuKpV9iQ47Xo";
 
 app.post("/telegram-auth", (req, res) => {
+  console.log("telegram-auth");
   const userData = req.body;
 
   // 检查哈希是否存在
