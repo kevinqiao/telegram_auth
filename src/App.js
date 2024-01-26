@@ -1,6 +1,10 @@
 // app.js
+
 const express = require("express");
+const cors = require("cors");
 const app = express();
+
+app.use(cors());
 app.use(express.json()); // 解析 JSON 请求体
 
 // 添加其他中间件和路由...
