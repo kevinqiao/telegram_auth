@@ -28,10 +28,11 @@ app.post("/telegram-auth", (req, res) => {
   const dataCheckString = Object.keys(userData)
     .filter((key) => key !== "hash")
     .sort()
-    .map((key) => {
-      const value = userData[key];
-      return `${key}=${typeof value === "object" ? JSON.stringify(value) : value}`;
-    })
+    .map((key) => `${key}=${userData[key]}`)
+    // .map((key) => {
+    //   const value = userData[key];
+    //   return `${key}=${typeof value === "object" ? JSON.stringify(value) : value}`;
+    // })
     .join("\n");
   console.log(dataCheckString);
   const lines = dataCheckString.split("\n");
