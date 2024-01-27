@@ -19,48 +19,26 @@ app.post("/telegram-auth", (req, res) => {
   console.log("telegram-auth");
   const validData = req.body;
   const dataCheckString = validData.initDataStr;
-  console.log(validData);
-  const strs = dataCheckString.split("&");
-  const sdata = strs
-    .filter((s) => s.indexOf("hash") < 0)
-    .sort()
-    .join("\n");
-  console.log(sdata);
+  const encoded = decodeURIComponent(dataCheckString);
 
-  //   // 检查哈希是否存在
-  //   if (!userData.hash) {
-  //     return res.status(400).send("缺少哈希值");
-  //   }
+  // HMAC-SHA-256 signature of the bot's token with the constant string WebAppData used as a key.
+  const secret = crypto.createHmac("sha256", "WebAppData").update(TELEGRAM_BOT_TOKEN);
 
-  //   // 生成数据检查字符串
-  //   const dataCheckString = Object.keys(userData)
-  //     .filter((key) => key !== "hash")
-  //     .sort()
-  //     .map((key) => `${key}=${userData[key]}`)
-  //     // .map((key) => {
-  //     //   const value = userData[key];
-  //     //   return `${key}=${typeof value === "object" ? JSON.stringify(value) : value}`;
-  //     // })
-  //     .join("\n");
-  //   console.log(dataCheckString);
-  //   const lines = dataCheckString.split("\n");
-  //   console.log(lines);
-  //   const keyValueRegex = /^[a-zA-Z_]+=[^\s]+$/; // 简单的正则表达式示例
+  // Data-check-string is a chain of all received fields'.
+  const arr = encoded.split("&");
+  const hashIndex = arr.findIndex((str) => str.startsWith("hash="));
+  const hash = arr.splice(hashIndex)[0].split("=")[1];
+  // sorted alphabetically
+  arr.sort((a, b) => a.localeCompare(b));
+  // in the format key=<value> with a line feed character ('\n', 0x0A) used as separator
+  // e.g., 'auth_date=<auth_date>\nquery_id=<query_id>\nuser=<user>
+  const dataCheckString = arr.join("\n");
 
-  //   for (const line of lines) {
-  //     if (!keyValueRegex.test(line)) {
-  //       console.error(`格式错误的行: ${line}`);
-  //     }
-  //   }
+  // The hexadecimal representation of the HMAC-SHA-256 signature of the data-check-string with the secret key
+  const _hash = crypto.createHmac("sha256", secret.digest()).update(dataCheckString).digest("hex");
 
-  // 使用 Bot Token 生成哈希值的密钥
-  const secretKey = crypto.createHash("sha256", "WebAppData").update(TELEGRAM_BOT_TOKEN).digest();
-
-  // 使用密钥生成哈希值
-  const hash = crypto.createHmac("sha256", secretKey).update(sdata).digest("hex");
-  console.log(validData.initDataObj.hash + ":" + hash);
   // 比较哈希值
-  if (hash === validData.initDataObj.hash) {
+  if (hash === _hash) {
     // 验证成功
     res.send({ status: "success", data: validData });
   } else {
