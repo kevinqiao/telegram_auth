@@ -18,8 +18,7 @@ app.get("/test", (req, res) => {
 app.post("/telegram-auth", (req, res) => {
   console.log("telegram-auth");
   const validData = req.body;
-  const dataCheckString = validData.initDataStr;
-  const encoded = decodeURIComponent(dataCheckString);
+  const encoded = decodeURIComponent(validData.initDataStr);
 
   // HMAC-SHA-256 signature of the bot's token with the constant string WebAppData used as a key.
   const secret = crypto.createHmac("sha256", "WebAppData").update(TELEGRAM_BOT_TOKEN);
