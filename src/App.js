@@ -31,6 +31,7 @@ app.post("/telegram-auth", (req, res) => {
   arr.sort((a, b) => a.localeCompare(b));
   // in the format key=<value> with a line feed character ('\n', 0x0A) used as separator
   // e.g., 'auth_date=<auth_date>\nquery_id=<query_id>\nuser=<user>
+
   const dataCheckString = arr.join("\n");
 
   // The hexadecimal representation of the HMAC-SHA-256 signature of the data-check-string with the secret key
@@ -38,8 +39,15 @@ app.post("/telegram-auth", (req, res) => {
   console.log(hash + ":" + _hash);
   // 比较哈希值
   if (hash === _hash) {
+    const userStr = arr.find((a) => a.startsWith("user="));
+    let userObj;
+    if (userStr) {
+      const userEncoded = decodeURIComponent(userStr.substring(5));
+      console.log(userEncoded);
+      userObj = JSON.parse(userEncoded);
+    }
     // 验证成功
-    res.send({ status: "success", data: validData });
+    res.send({ status: "success", data: userObj ?? {} });
   } else {
     // 验证失败
     res.status(401).send({ status: "error", message: "数据验证失败" });
