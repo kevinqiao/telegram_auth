@@ -35,7 +35,7 @@ app.post("/telegram-auth", (req, res) => {
 
   // The hexadecimal representation of the HMAC-SHA-256 signature of the data-check-string with the secret key
   const _hash = crypto.createHmac("sha256", secret.digest()).update(dataCheckString).digest("hex");
-
+  console.log(hash + ":" + _hash);
   // 比较哈希值
   if (hash === _hash) {
     // 验证成功
