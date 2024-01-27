@@ -20,6 +20,9 @@ app.post("/telegram-auth", (req, res) => {
   const validData = req.body;
   const dataCheckString = validData.initDataStr;
   console.log(validData);
+  const strs = dataCheckString.split("&");
+  const sdata = strs.sort().join("&");
+  console.log(sdata);
 
   //   // 检查哈希是否存在
   //   if (!userData.hash) {
