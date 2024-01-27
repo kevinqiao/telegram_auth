@@ -21,7 +21,7 @@ app.post("/telegram-auth", (req, res) => {
   const dataCheckString = validData.initDataStr;
   console.log(validData);
   const strs = dataCheckString.split("&");
-  const sdata = strs.sort().join("&");
+  const sdata = strs.sort().join("\n");
   console.log(sdata);
 
   //   // 检查哈希是否存在
