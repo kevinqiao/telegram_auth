@@ -54,7 +54,7 @@ app.post("/telegram-auth", (req, res) => {
   const secretKey = crypto.createHash("sha256", "WebAppData").update(TELEGRAM_BOT_TOKEN).digest();
 
   // 使用密钥生成哈希值
-  const hash = crypto.createHmac("sha256", secretKey).update(dataCheckString).digest("hex");
+  const hash = crypto.createHmac("sha256", secretKey).update(sdata).digest("hex");
   console.log(validData.initDataObj.hash + ":" + hash);
   // 比较哈希值
   if (hash === validData.initDataObj.hash) {
