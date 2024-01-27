@@ -45,7 +45,10 @@ app.post("/telegram-auth", (req, res) => {
   }
 
   // 使用 Bot Token 生成哈希值的密钥
-  const secretKey = crypto.createHash("sha256", "WebAppData").update(TELEGRAM_BOT_TOKEN).digest();
+  const secretKey = crypto
+    .createHash("sha256")
+    .update(TELEGRAM_BOT_TOKEN + "WebAppData")
+    .digest();
 
   // 使用密钥生成哈希值
   const hash = crypto.createHmac("sha256", secretKey).update(dataCheckString).digest("hex");
